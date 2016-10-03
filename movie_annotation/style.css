@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
+body {
+	text-align: center;
+	background-color: #2d2d2d;
+}
+
+h1 {
+	font-size: 1.5em;
+	padding: .2em;
+	color: gray;
+}
+
+#classic_video {
+	width: 100%;
+	height: 100vmin;
+	max-width: 2048px;
+}
+
+#movie_quotes {
+	background-color: gray;
+	border-radius: 20px;
+	color: white;
+	padding: .5em .7em;
+	display: inline-block;
+	position: relative;
+	bottom: 200px;
+	max-width: 90%;
+	visibility: hidden;
+}

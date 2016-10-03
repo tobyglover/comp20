@@ -14,7 +14,63 @@
 <div id="movie_quotes"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
+	var player = document.getElementById("classic_video");
+	var quotes = document.getElementById("movie_quotes");
+
+	player.addEventListener("timeupdate", playerTimeUpdated);
+
+	function playerTimeUpdated() {
+		playerTime = player.currentTime;
+		var quote = "";
+
+		// Don't love the use of if statements in this way
+		if (playerTime > 23.9 && playerTime < 26) {
+			quote = 'Igor: DR. FRANKENSTEIN?!?!?'
+		} else if (playerTime > 31.3 && playerTime < 33.8) {
+			quote = 'Dr. Frederick Frankenstein: Frokensteen.'
+		} else if (playerTime > 34 && playerTime < 36) {
+			quote = "Igor: You're putting me on."
+		} else if (playerTime > 36 && playerTime < 39.4) {
+			quote = 'Dr. Frederick Frankenstein: No, it pronounced, "Frokensteen".'
+		} else if (playerTime > 40 && playerTime < 42.3) {
+			quote = "Igor: Do you also say Froaderick?"
+		} else if (playerTime > 42.3 && playerTime < 44) {
+			quote = 'Dr. Frederick Frankenstein: No . . . "Frederick."'
+		} else if (playerTime > 44.2 && playerTime < 47) {
+			quote = "Igor: Well, why isn't it 'Froaderick Frokensteen'?"
+		} else if (playerTime > 47 && playerTime < 49.21) {
+			quote = 'Dr. Frederick Frankenstein: It isn\'t, it\'s "Frederick Frokensteen"'
+		} else if (playerTime > 50 && playerTime < 51.2) {
+			quote = "Igor: I see."
+		} else if (playerTime > 51.6 && playerTime < 53.2) {
+			quote = "Dr. Frederick Frankenstein: You must be Igor. [He pronounces it ee-gor.]"
+		} else if (playerTime > 53.2 && playerTime < 56) {
+			quote = 'Igor: No, it\'s pronounced "eye-gor."'
+		} else if (playerTime > 57 && playerTime < 58.9) {
+			quote = 'Dr. Frederick Frankenstein: But they told me it was "ee-gor"...'
+		} else if (playerTime > 58.9 && playerTime < 60.8) {
+			quote = "Igor: Well, they were wrong then, weren't they?"
+		} else if (playerTime > 61 && playerTime < 64.1) {
+			quote = "Dr. Frederick Frankenstein: Uh, you were sent here by Herr Falkstein, weren't you?"
+		} else if (playerTime > 64.2 && playerTime < 68.6) {
+			quote = "Igor: Yes. My grandfather used to work for your grandfather."
+		} else if (playerTime > 69.5 && playerTime < 72) {
+			quote = "Dr. Frederick Frankenstein: How nice."
+		} else if (playerTime > 72 && playerTime < 74) {
+			quote = "Igor: Of course the rates have gone up."
+		} else if (playerTime > 74 && playerTime < 89) {
+			quote = "Dr. Frederick Frankenstein: Of course, of course, I'm sure we'll get along splendidly. Oh, I uh, you know I don't mean to embarrass you, but I'm rather a brilliant surgeon. Perhaps I can help you with that hump."
+		} else if (playerTime > 89 && playerTime < 91) {
+			quote = "Igor: What hump?"
+		} 
+
+		if (quote == "") {
+			quotes.style.visibility = "hidden";
+		} else {
+			quotes.style.visibility = "visible";
+			quotes.innerHTML = quote;
+		}
+	}
 </script>
 </body>
 </html>	
