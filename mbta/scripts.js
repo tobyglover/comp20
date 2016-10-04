@@ -1,7 +1,8 @@
 var map;
 var userMarker;
 var userPos = {lat: -1, lng: -1};
-var markerList = [];
+var xhr = new XMLHttpRequest();
+var trainStatusURL = "https://rocky-taiga-26352.herokuapp.com/redline.json";
 var stations = {
 				   "Alewife":{coords:{lat:42.395428, lng:-71.142483}, connectedTo:["Davis"]},
 				   "Davis":{coords:{lat:42.39674, lng:-71.121815}, connectedTo:["Porter Square"]},
@@ -35,6 +36,7 @@ function init() {
 
 	populateStations();
 	getUserLocation();
+	getTrainStatus();
 }
 
 function getUserLocation() {
@@ -91,6 +93,23 @@ function populateStations() {
 			drawPath('#FF0000', polylineCoords);
 		}
 	}
+}
+
+function getTrainStatus() {
+	xhr.open("get", trainStatusURL, true);
+	xhr.responseType = "json";
+	xhr.onload = function() {
+		if (xhr.status == 200) {
+			parseTrainStatus(xhr.response);
+		} else {
+			alert("Unable to retrieve train status.");
+		}
+    };
+    xhr.send();
+}
+
+function parseTrainStatus(json) {
+	console.log(json);
 }
 
 /* helper function, draws path of specified color between polylineCoords */
