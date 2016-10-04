@@ -52,7 +52,7 @@ function init() {
         });
 
 	populateStationMarkers();
-	connectStationMarkerts();
+	connectStationMarkers();
 	getUserLocation();
 }
 
@@ -95,12 +95,13 @@ function populateStationMarkers() {
 		marker = new google.maps.Marker({
 	    	position: station.coords,
 	    	map: map,
-	    	title: station.name
+	    	title: station.name,
+	    	icon: "mbta.png"
 	  	});
 	}
 }
 
-function connectStationMarkerts() {
+function connectStationMarkers() {
 	/* Connects alewife to ashmont */
 	var polylineCoords = [];
 	var path;
