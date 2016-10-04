@@ -79,6 +79,7 @@ function handleUserLocation() {
 function populateUserMarker() {
 	userMarker = new google.maps.Marker({
     	position: userPos,
+    	icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
     	map: map
   	});
   	map.panTo(userPos);
