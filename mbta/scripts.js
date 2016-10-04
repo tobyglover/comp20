@@ -78,13 +78,6 @@ function calculateClosestStation() {
 	drawPath('#0000FF', polylineCoords);
 }
 
-function populateStationMarkers() {
-	for (var i = 0; i < stationList.length; i++) {
-		station = stationList[i];
-		
-	}
-}
-
 function populateStations() {
 	var polylineCoords = [];
 	var station;
@@ -97,17 +90,6 @@ function populateStations() {
 			polylineCoords[1] = stations[station.connectedTo[i]].coords;
 			drawPath('#FF0000', polylineCoords);
 		}
-	}
-}
-
-function connectStationMarkers() {
-	
-	var path;
-	var connectedIndicies;
-
-	for (var i = 0; i < connectedStations.length; i++) {
-		connectedIndicies = connectedStations[i];
-		
 	}
 }
 
