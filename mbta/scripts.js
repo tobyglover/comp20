@@ -41,6 +41,10 @@ function init() {
 	populateStations();
 	getUserLocation();
 	getTrainStatus();
+
+	setInterval(function() {
+  		getTrainStatus();
+	}, 30000);
 }
 
 function getUserLocation() {
