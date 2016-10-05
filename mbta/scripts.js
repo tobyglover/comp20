@@ -110,7 +110,7 @@ function getTrainStatus() {
 		if (xhr.status == 200) {
 			parseTrainStatus(xhr.response);
 		} else {
-			alert("Unable to retrieve train status.");
+			console.warn("Unable to retrieve train status.");
 		}
     };
     xhr.send();
