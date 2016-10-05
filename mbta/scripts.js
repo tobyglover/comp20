@@ -2,6 +2,7 @@ var map;
 var userMarker;
 var userPos = {lat: -1, lng: -1};
 var xhr = new XMLHttpRequest();
+var lastTrainStatus = 0;
 var trainStatusURL = "https://rocky-taiga-26352.herokuapp.com/redline.json";
 var stations = {
 				   "Alewife":{coords:{lat:42.395428, lng:-71.142483}, connectedTo:["Davis"]},
@@ -26,7 +27,7 @@ var stations = {
 				   "Quincy Center":{coords:{lat:42.251809, lng:-71.005409}, connectedTo:["Quincy Adams"]},
 				   "Quincy Adams":{coords:{lat:42.233391, lng:-71.007153}, connectedTo:["Braintree"]},
 				   "Braintree":{coords:{lat:42.2078543, lng:-71.0011385}, connectedTo:[]}
-				}
+				};
 
 function init() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -108,8 +109,27 @@ function getTrainStatus() {
     xhr.send();
 }
 
-function parseTrainStatus(json) {
-	console.log(json);
+function parseTrainStatus(TrainStatus) {
+	console.log(TrainStatus);
+
+	lastTrainStatus = TrainStatus.CurrentTime;
+	for (var i = 0; i < TrainStatus.TripList.Trips.length; i++) {
+		var trip = TrainStatus.TripList.Trips[i];
+
+		for (var j = 0; j < trip.Predictions.length; j++) {
+			var prediction = trip.Predictions[j];
+
+			if (stations[prediction.Stop]["LastUpdated"] == undefined || 
+				stations[prediction.Stop]["LastUpdated"] < TrainStatus.CurrentTime) {
+
+				stations[prediction.Stop]["LastUpdated"] = TrainStatus.CurrentTime;
+				stations[prediction.Stop]["UpcomingTrains"] = [];
+			}
+
+			stations[prediction.Stop]["UpcomingTrains"].push({destination:trip.Destination,
+															  secondsAway:prediction.Seconds})
+		}
+	}
 }
 
 /* helper function, draws path of specified color between polylineCoords */
