@@ -12,3 +12,28 @@ html, body {
 #map {
 	height: 100%;
 }
+
+.iwContent {
+	width: 125px;
+}
+
+.iwStationName {
+	padding: 0;
+	margin: 0;
+	font-size: 18px;
+}
+
+.iwLastUpdated {
+	color: gray;
+	margin: .2em 0;
+	font-weight: normal;
+}
+
+.upcomingTrainItem {
+	width:100%;
+}
+
+.upcomingTrainTime {
+	float: right;
+	color: gray;
+}
