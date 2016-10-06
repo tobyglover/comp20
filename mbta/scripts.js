@@ -42,9 +42,14 @@ function init() {
 	getUserLocation();
 	getTrainStatus();
 
+	// Update every 30 seconds
 	setInterval(function() {
   		getTrainStatus();
 	}, 30000);
+
+	map.addListener("click", function() {
+		infowindow.close();
+	})
 }
 
 function getUserLocation() {
@@ -142,16 +147,24 @@ function markerClicked(marker) {
 
 		var iwContent = document.createElement("div");
 		var iwStationName = document.createElement("h1");
+		var iwStationDist = document.createElement("h2");
 		var iwLastUpdated = document.createElement("h2");
 
 		iwContent.className = "iwContent";
 		iwStationName.className = "iwStationName";
-		iwLastUpdated.className = "iwLastUpdated";
+		iwStationDist.className = "iwData";
+		iwLastUpdated.className = "iwData";
 
 		iwContent.appendChild(iwStationName);
+		iwContent.appendChild(iwStationDist);
 		iwContent.appendChild(iwLastUpdated);
 
 		iwStationName.innerHTML = marker.title;
+		if (station.distance == undefined) {
+			iwStationDist.innerHTML = "Distance: unknown";
+		} else {
+			iwStationDist.innerHTML = "Distance: " + station.distance + "km";
+		}
 
 		if (station.UpcomingTrains != undefined) {
 			station.UpcomingTrains.sort(function(a, b) {
@@ -161,20 +174,22 @@ function markerClicked(marker) {
 			for (var i = 0; i < station.UpcomingTrains.length; i++) {
 				var upcomingTrain = station.UpcomingTrains[i];
 
-				var upcomingTrainItem = document.createElement("div");
-				var upcomingTrainDestination = document.createElement("span");
-				var upcomingTrainTime = document.createElement("span");
+				if (upcomingTrain.secondsAway > 0) {
+					var upcomingTrainItem = document.createElement("div");
+					var upcomingTrainDestination = document.createElement("span");
+					var upcomingTrainTime = document.createElement("span");
 
-				upcomingTrainItem.className = "upcomingTrainItem";
-				upcomingTrainDestination.className = "upcomingTrainDestination";
-				upcomingTrainTime.className = "upcomingTrainTime";
+					upcomingTrainItem.className = "upcomingTrainItem";
+					upcomingTrainDestination.className = "upcomingTrainDestination";
+					upcomingTrainTime.className = "upcomingTrainTime";
 
-				upcomingTrainDestination.innerHTML = upcomingTrain.destination;
-				upcomingTrainTime.innerHTML = toTimeString(upcomingTrain.secondsAway);
+					upcomingTrainDestination.innerHTML = upcomingTrain.destination;
+					upcomingTrainTime.innerHTML = toTimeString(upcomingTrain.secondsAway);
 
-				upcomingTrainItem.appendChild(upcomingTrainDestination);
-				upcomingTrainItem.appendChild(upcomingTrainTime);
-				iwContent.appendChild(upcomingTrainItem);
+					upcomingTrainItem.appendChild(upcomingTrainDestination);
+					upcomingTrainItem.appendChild(upcomingTrainTime);
+					iwContent.appendChild(upcomingTrainItem);
+				}
 			}
 			var date = new Date();
 			var diffSeconds = Math.floor(date.getTime() / 1000) - station.LastUpdated;
