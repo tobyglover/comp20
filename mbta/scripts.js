@@ -193,6 +193,9 @@ function markerClicked(marker) {
 			}
 			var date = new Date();
 			var diffSeconds = Math.floor(date.getTime() / 1000) - station.LastUpdated;
+			if (diffSeconds < 1) {
+				diffSeconds = 1;
+			}
 			iwLastUpdated.innerHTML = "Last Updated: " + toTimeString(diffSeconds);
 		} else {
 			iwLastUpdated.innerHTML = "No Station Info Available";
