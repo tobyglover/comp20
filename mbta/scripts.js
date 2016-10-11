@@ -1,6 +1,7 @@
 var map;
 var infowindow;
 var userMarker;
+var closestStation;
 var userPos = {lat: -1, lng: -1};
 var xhr = new XMLHttpRequest();
 var trainStatusURL = "https://rocky-taiga-26352.herokuapp.com/redline.json";
@@ -73,13 +74,12 @@ function handleUserLocation() {
 }
 
 function populateUserMarker() {
-	placeMarker(userPos, "You are here", "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+	placeMarker(userPos, "Current Location", "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
   	map.panTo(userPos);
 }
 
 function calculateClosestStation() {
 	var shortestDistance = -1;
-	var closestStation;
 
 	for (var stationName in stations) {
 		var distance = haversine_distance(userPos, stations[stationName].coords)
@@ -142,29 +142,25 @@ function parseTrainStatus(TrainStatus) {
 }
 
 function markerClicked(marker) {
-	if (marker.title != "You are here"){
-		var station = stations[marker.title];
+	var station;
+	var iwContent = document.createElement("div");
+	var iwStationName = document.createElement("h1");
+	var iwStationDist = document.createElement("h2");
+	var iwLastUpdated = document.createElement("h2");
 
-		var iwContent = document.createElement("div");
-		var iwStationName = document.createElement("h1");
-		var iwStationDist = document.createElement("h2");
-		var iwLastUpdated = document.createElement("h2");
+	iwContent.className = "iwContent";
+	iwStationName.className = "iwStationName";
+	iwStationDist.className = "iwData";
+	iwLastUpdated.className = "iwData";
 
-		iwContent.className = "iwContent";
-		iwStationName.className = "iwStationName";
-		iwStationDist.className = "iwData";
-		iwLastUpdated.className = "iwData";
+	iwContent.appendChild(iwStationName);
+	iwContent.appendChild(iwStationDist);
+	iwContent.appendChild(iwLastUpdated);
 
-		iwContent.appendChild(iwStationName);
-		iwContent.appendChild(iwStationDist);
-		iwContent.appendChild(iwLastUpdated);
+	if (marker.title != "Current Location"){
+		station = stations[marker.title];
 
 		iwStationName.innerHTML = marker.title;
-		if (station.distance == undefined) {
-			iwStationDist.innerHTML = "Distance: unknown";
-		} else {
-			iwStationDist.innerHTML = "Distance: " + station.distance + "km";
-		}
 
 		if (station.UpcomingTrains != undefined) {
 			station.UpcomingTrains.sort(function(a, b) {
@@ -200,10 +196,20 @@ function markerClicked(marker) {
 		} else {
 			iwLastUpdated.innerHTML = "No Station Info Available";
 		}
-
-		infowindow.setContent(iwContent);
-		infowindow.open(map, marker);
+	} else {
+		station = stations[closestStation];
+		iwStationName.innerHTML = marker.title;
+		iwLastUpdated.innerHTML = "Closest Station: " + closestStation
 	}
+
+	if (station.distance == undefined) {
+		iwStationDist.innerHTML = "Distance: unknown";
+	} else {
+		iwStationDist.innerHTML = "Distance: " + station.distance + "km";
+	}
+
+	infowindow.setContent(iwContent);
+	infowindow.open(map, marker);
 }
 
 /* helper function, formats time in seconds since epoch to XXm YYs from now*/
