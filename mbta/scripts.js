@@ -112,7 +112,7 @@ function getTrainStatus() {
 	xhr.open("get", trainStatusURL, true);
 	xhr.responseType = "json";
 	xhr.onload = function() {
-		if (xhr.status == 200) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
 			parseTrainStatus(xhr.response);
 		} else {
 			console.warn("Unable to retrieve train status.");
@@ -122,23 +122,21 @@ function getTrainStatus() {
 }
 
 function parseTrainStatus(TrainStatus) {
-	if (xhr.readyState == 4 && xhr.status == 200) {
-		for (var i = 0; i < TrainStatus.TripList.Trips.length; i++) {
-			var trip = TrainStatus.TripList.Trips[i];
+	for (var i = 0; i < TrainStatus.TripList.Trips.length; i++) {
+		var trip = TrainStatus.TripList.Trips[i];
 
-			for (var j = 0; j < trip.Predictions.length; j++) {
-				var prediction = trip.Predictions[j];
+		for (var j = 0; j < trip.Predictions.length; j++) {
+			var prediction = trip.Predictions[j];
 
-				if (stations[prediction.Stop]["LastUpdated"] == undefined || 
-					stations[prediction.Stop]["LastUpdated"] < TrainStatus.TripList.CurrentTime) {
+			if (stations[prediction.Stop]["LastUpdated"] == undefined || 
+				stations[prediction.Stop]["LastUpdated"] < TrainStatus.TripList.CurrentTime) {
 
-					stations[prediction.Stop]["LastUpdated"] = TrainStatus.TripList.CurrentTime;
-					stations[prediction.Stop]["UpcomingTrains"] = [];
-				}
-
-				stations[prediction.Stop]["UpcomingTrains"].push({destination:trip.Destination,
-																  secondsAway:prediction.Seconds})
+				stations[prediction.Stop]["LastUpdated"] = TrainStatus.TripList.CurrentTime;
+				stations[prediction.Stop]["UpcomingTrains"] = [];
 			}
+
+			stations[prediction.Stop]["UpcomingTrains"].push({destination:trip.Destination,
+															  secondsAway:prediction.Seconds})
 		}
 	}
 }
