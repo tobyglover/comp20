@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Captain's Log</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+		var log;
+		var textBox;
+		var localStorageKey = "msgs";
+		var msgs = [];
+
+		$(document).ready(function(){
+			log = $("#log");
+			textBox = $("#msg");
+
+			getMsgsFromCache();
+
+			textBox.keydown(function(e) {
+			    if(e.keyCode == 13) {
+					handleMsg(textBox.val());
+					textBox.val("");
+			    }
+			});
+		});
+
+		function getMsgsFromCache() {
+			var msgStrings = localStorage.getItem(localStorageKey);
+			if (msgStrings) {
+				msgs = JSON.parse(msgStrings);
+				for (var i = 0; i < msgs.length; i++) {
+					var msg = msgs[i];
+					outputMsg(msg.content, new Date(msg.created));
+				}
+	    	}
+		}
+
+		function storeMsgInCache(msg, timestamp) {
+			msgs.push({"created":timestamp.getTime(), "content":msg});
+			console.log(msgs);
+			localStorage.setItem(localStorageKey, JSON.stringify(msgs));
+		}
+
+		function handleMsg(msg) {
+			var timestamp = new Date();
+			outputMsg(msg, timestamp);
+			storeMsgInCache(msg, timestamp);
+		}
+
+		function outputMsg(msg, timestamp) {
+			output = "<p>" + getUserReadableDate(timestamp) + " - " + msg + "</p>";
+			log.prepend(output)
+		}
+
+		function getUserReadableDate(timestamp) {
+			var dayOfWeek;
+			var month;
+			var dateStr;
+
+			switch (timestamp.getDay()) {
+				case 0:
+					dayOfWeek = "Sunday";
+					break;
+				case 1:
+					dayOfWeek = "Monday";
+					break;
+				case 2:
+					dayOfWeek = "Tuesday";
+					break;
+				case 3:
+					dayOfWeek = "Wednesday";
+					break;
+				case 4:
+					dayOfWeek = "Thursday";
+					break;
+				case 5:
+					dayOfWeek = "Friday";
+					break;
+				case 6:
+					dayOfWeek = "Saturday";
+					break;
+			}
+
+			switch (timestamp.getMonth()) {
+				case 0:
+					month = "January";
+					break;
+				case 1:
+					month = "February";
+					break;
+				case 2:
+					month = "March";
+					break;
+				case 3:
+					month = "April";
+					break;
+				case 4:
+					month = "May";
+					break;
+				case 5:
+					month = "June";
+					break;
+				case 6:
+					month = "July";
+					break;
+				case 7:
+					month = "August";
+					break;
+				case 8:
+					month = "September";
+					break;
+				case 9: 
+					month = "October";
+					break;
+				case 10:
+					month = "November";
+					break;
+				case 11:
+					month = "December";
+					break;
+			}
+
+			return dayOfWeek + ", " + month + " " + timestamp.getDate() +  " " + timestamp.getFullYear() + ", " + timestamp.getHours() + ":" + timestamp.getMinutes() + ":" + timestamp.getSeconds();
+		}
+
+	</script>
+</head>
+
+<body>
+	<h1>Captain's Log</h1>
+	<h3>New entry: <input type="text" id="msg" name="msg" size="30" /></h3>
+	<div id="log"></div>
+</body>
+</html>
