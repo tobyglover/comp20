@@ -4,7 +4,7 @@ var userMarker;
 var closestStation;
 var userPos = {lat: -1, lng: -1};
 var xhr = new XMLHttpRequest();
-var trainStatusURL = "https://rocky-taiga-26352.herokuapp.com/redline.json";
+var trainStatusURL = "https://floating-taiga-16664.herokuapp.com/redline.json";
 var stations = {"Alewife":{coords:{lat:42.395428, lng:-71.142483}, connectedTo:["Davis"]},
        		   "Davis":{coords:{lat:42.39674, lng:-71.121815}, connectedTo:["Porter Square"]},
        		   "Porter Square":{coords:{lat:42.3884, lng:-71.11914899999999}, connectedTo:["Harvard Square"]},
