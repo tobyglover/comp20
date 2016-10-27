@@ -97,7 +97,7 @@ GameManager.prototype.actuate = function () {
   });
 
   if (this.over) {
-    var grid = this.grid.serialize();
+    var grid = JSON.stringify(this.grid);
     var score = this.score;
     setTimeout(function(){transmitScore(grid, score)}, 2000);
   }
