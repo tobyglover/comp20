@@ -95,6 +95,12 @@ GameManager.prototype.actuate = function () {
     bestScore:  this.storageManager.getBestScore(),
     terminated: this.isGameTerminated()
   });
+
+  if (this.over) {
+    var grid = this.grid.serialize();
+    var score = this.score;
+    setTimeout(function(){transmitScore(grid, score)}, 2000);
+  }
 };
 
 // Represent the current game as an object
@@ -183,14 +189,9 @@ GameManager.prototype.move = function (direction) {
 
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
-      var state = this.storageManager.getGameState();
     }
 
     this.actuate();
-  }
-
-  if (this.over) {
-    this.transmitScore(state);
   }
 };
 
@@ -275,7 +276,7 @@ GameManager.prototype.positionsEqual = function (first, second) {
   return first.x === second.x && first.y === second.y;
 };
 
-GameManager.prototype.transmitScore = function(state) {
+function transmitScore(grid, score) {
   var previousUsername = localStorage.getItem("username");
   var desiredUsername = " ";
 
@@ -284,5 +285,5 @@ GameManager.prototype.transmitScore = function(state) {
   }
 
   localStorage.setItem("username", desiredUsername);
-  $.post("https://vast-beyond-35272.herokuapp.com/submit.json", {username: desiredUsername, score: state.score, grid: state.grid});
+  $.post("https://vast-beyond-35272.herokuapp.com/submit.json", {username: desiredUsername, score: score, grid: grid});
 }
