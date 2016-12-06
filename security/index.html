@@ -29,6 +29,8 @@
 
 	<p>This is, of course, taking it to the extreme, but using the server as your own personal key-value store is not a rediculous thought. This is not severe, assuming that users do not insert so much data that the server run into storage limits with the database provider. Therefore, I give this a severity of <strong>medium</strong>. An easy fix is to explicitly insert the values that you want from the request body into the database, rather than inserting the entire request body. Limiting the values to a certain size will help as well, for example usernames probably don't need to be more than 20 characters long.</p>
 
+	<p>That being said, another problem is that values are not escaped before representing them on the page. Therefore, I was able to insert <pre style="display:inline;">&lt;img&gt;</pre> and <pre style="display:inline";>&lt;script&gt;</pre> tags. This is a bigger issue, as a malicious user can redirect the site to whatever site they desire (as seen with the redirect I placed that sends all users who click ok to <a href="tobyglover.com">tobyglover.com</a>. This is <strong>high</strong> severity issue.</p>
+
 	<h3>CORS Everywhere</h3>
 	<p>Due to the fact that this is essentially an API, granting CORS for certain endpoints is a requirement. However, granting it on all endpoints when it is only needed on /submit.json and /scores.json seems unnecessary. To make matters worse, it has been permitted for all websites rather than for specific "whitelisted" websites. Finally, it allows for CORS not only in GET and POST requests but also on PUT and DELETE requests, which you almost definitely do not want. Due to its openess for malicious attacks from other websites, this is also given a severity of <strong>medium</strong>. The issue is easily resolved through use of a whitelist and only enabling CORS for specific endpoints.</p>
 
@@ -39,6 +41,6 @@
 
 	<h2>Conclusion</h2>
 
-	<p>In conclusion, this is overall a relatively insecure API. No value or size checking is done on incoming requests, allowing for anything to be stored in the database. In addition, CORS allows for any site to take advantage of your site. Finally, zero work is done to prevent a full datadump.</p>
+	<p>In conclusion, this is overall a relatively insecure API. No value or size checking is done on incoming requests, allowing for anything to be stored in the database. In addition, CORS allows for any site to take advantage of your site. Finally, zero work is done to prevent a full datadump. The enabling of CORS for all request origins combined with the ability to insert arbitrary scripts makes this API entirely unusable for any production codebase with an concern for security.</p>
 </body>
 </html>
